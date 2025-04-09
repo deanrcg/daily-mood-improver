@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-10">
+        <div class="card">
+            <div class="card-body">
+                <h2 class="card-title mb-4">Your Mood History</h2>
+                
+                {% if entries %}
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Mood Rating</th>
+                                    <th>Description</th>
+                                    <th>Plans</th>
+                                    <th>Suggestions</th>
+                                    <th>Improvement</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for entry in entries %}
+                                <tr>
+                                    <td>{{ entry.date.strftime('%Y-%m-%d') }}</td>
+                                    <td>
+                                        <div class="progress" style="height: 20px;">
+                                            <div class="progress-bar" role="progressbar" 
+                                                 style="width: {{ entry.mood_rating * 10 }}%">
+                                                {{ entry.mood_rating }}/10
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>{{ entry.mood_description }}</td>
+                                    <td>{{ entry.daily_plans }}</td>
+                                    <td>
+                                        <ul class="list-unstyled">
+                                            {% for suggestion in eval(entry.suggestions) %}
+                                            <li><i class="fas fa-check text-success"></i> {{ suggestion }}</li>
+                                            {% endfor %}
+                                        </ul>
+                                    </td>
+                                    <td>
+                                        {% if entry.improvement_rating %}
+                                            <div class="progress" style="height: 20px;">
+                                                <div class="progress-bar bg-success" role="progressbar" 
+                                                     style="width: {{ entry.improvement_rating * 10 }}%">
+                                                    {{ entry.improvement_rating }}/10
+                                                </div>
+                                            </div>
+                                        {% else %}
+                                            <span class="text-muted">Not rated yet</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <div class="text-center py-4">
+                        <p class="lead">No mood entries yet.</p>
+                        <a href="{{ url_for('main.mood_entry') }}" class="btn btn-primary">
+                            <i class="fas fa-plus-circle"></i> Add Your First Entry
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

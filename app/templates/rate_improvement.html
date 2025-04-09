@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-body">
+                <h2 class="card-title mb-4">Rate Yesterday's Suggestions</h2>
+                
+                <div class="mb-4">
+                    <h5>Your Mood Rating: {{ entry.mood_rating }}/10</h5>
+                    <p class="mb-2">Description: {{ entry.mood_description }}</p>
+                    <p class="mb-2">Plans: {{ entry.daily_plans }}</p>
+                    
+                    <h6 class="mt-3">Suggestions:</h6>
+                    <ul class="list-group mb-4">
+                        {% for suggestion in eval(entry.suggestions) %}
+                        <li class="list-group-item">
+                            <i class="fas fa-check text-success"></i> {{ suggestion }}
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+
+                <form method="POST">
+                    <div class="mb-4">
+                        <label for="improvement_rating" class="form-label">
+                            How much did these suggestions help improve your mood? (1-10)
+                        </label>
+                        <div class="d-flex align-items-center">
+                            <input type="range" class="form-range flex-grow-1 me-3" id="improvement_rating" 
+                                   name="improvement_rating" min="1" max="10" value="5">
+                            <span id="rating_value" class="badge bg-primary">5</span>
+                        </div>
+                        <div class="d-flex justify-content-between mt-1">
+                            <small>Not at all</small>
+                            <small>Very helpful</small>
+                        </div>
+                    </div>
+
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="fas fa-check"></i> Submit Rating
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const ratingSlider = document.getElementById('improvement_rating');
+    const ratingValue = document.getElementById('rating_value');
+    
+    ratingSlider.addEventListener('input', function() {
+        ratingValue.textContent = this.value;
+    });
+</script>
+{% endblock %} 
